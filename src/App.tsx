@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import content from '../data/content.js'
 import './App.css'
 
@@ -21,6 +21,8 @@ function App() {
   const [candlesBlown, setCandlesBlown] = useState(false)
   const [hugSent, setHugSent] = useState(false)
   const [hugCount, setHugCount] = useState(0)
+  const [musicPlaying, setMusicPlaying] = useState(false)
+  const audioRef = useRef<HTMLAudioElement>(null)
   const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(content.birthday))
   const [birthdayPassed, setBirthdayPassed] = useState(() => new Date(content.birthday).getTime() <= Date.now())
 
@@ -43,6 +45,23 @@ function App() {
   )
 
   const goNext = () => setScreen((current) => Math.min(4, current + 1) as Screen)
+  const toggleMusic = async () => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    if (musicPlaying) {
+      audio.pause()
+      setMusicPlaying(false)
+      return
+    }
+
+    try {
+      await audio.play()
+      setMusicPlaying(true)
+    } catch {
+      setMusicPlaying(false)
+    }
+  }
   const navigateTo = (nextScreen: Screen) => {
     if (nextScreen >= 2 && (!birthdayPassed || !opened)) return
     setScreen(nextScreen)
@@ -50,6 +69,11 @@ function App() {
 
   return (
     <main className="birthday-app">
+      <audio ref={audioRef} loop preload="metadata" src={content.music.file} />
+      <button className={`music-button ${musicPlaying ? 'playing' : ''}`} onClick={toggleMusic} type="button">
+        <span aria-hidden="true">{musicPlaying ? '♫' : '♪'}</span>
+        {musicPlaying ? content.music.playingTitle : content.music.title}
+      </button>
       {screen === 0 && (
         <section className="screen intro-screen">
           <div className="screen-content intro-content">
@@ -58,7 +82,15 @@ function App() {
             <h1>{content.intro.title}</h1>
             <p className="subtitle">{content.intro.subtitle}</p>
           </div>
-          <ScreenFooter label={content.intro.button} screen={screen} onClick={goNext} onNavigate={navigateTo} />
+          <ScreenFooter
+            label={content.intro.button}
+            screen={screen}
+            onClick={() => {
+              goNext()
+              if (!musicPlaying) void toggleMusic()
+            }}
+            onNavigate={navigateTo}
+          />
         </section>
       )}
 

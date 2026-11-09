@@ -29,6 +29,25 @@ button { font: inherit; }
   overflow: hidden;
   background: var(--wine);
 }
+.music-button {
+  position: fixed;
+  z-index: 10;
+  top: 18px;
+  right: max(18px, calc((100vw - 430px) / 2 + 18px));
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgba(255, 240, 233, .2);
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--cream);
+  background: rgba(67, 20, 47, .9);
+  font-size: 11px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+.music-button span { color: var(--pink); font-size: 17px; line-height: 1; }
+.music-button.playing span { animation: music-wave .8s ease-in-out infinite alternate; }
 
 .screen {
   min-height: 100svh;
@@ -274,6 +293,7 @@ h2 { margin: 0; }
   35% { opacity: 1; transform: scale(1.4); }
   100% { opacity: 1; transform: scale(1); }
 }
+@keyframes music-wave { from { transform: translateY(2px) rotate(-8deg); } to { transform: translateY(-2px) rotate(8deg); } }
 
 @media (max-width: 360px) {
   .screen { padding-inline: 20px; }

@@ -1,6 +1,11 @@
 const content = {
   name: 'nedia rahmadani',
   birthday: '2026-11-10T00:00:00+07:00',
+  music: {
+    file: '/music/lagu-ulang-tahun.mp3',
+    title: 'Putar musik',
+    playingTitle: 'Jeda musik',
+  },
   intro: {
     eyebrow: 'Untuk Nedia rahmadani',
     title: 'Ada sesuatu yang spesial untukmu',
@@ -34,6 +39,7 @@ const content = {
     eyebrow: 'Perjalanan Kita',
     title: 'Kenangan yang kusimpan',
     photoLabel: 'Foto {number}',
+    hint: 'selamat menikmati fotonya dengan hapyy',
     button: 'Satu Lagi untukmu',
     items: [
       { date: '12 Agustus 2026',
